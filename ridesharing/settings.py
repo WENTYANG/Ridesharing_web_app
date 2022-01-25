@@ -84,6 +84,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     'NAME': 'rideapp',
+#     'USER': 'wenty',
+#     'PASSWORD': 'wenty12358',
+#     'HOST': 'localhost',
+#     'PORT': '',
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -132,5 +143,5 @@ MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'blog-home'
+LOGIN_REDIRECT_URL = 'blog-home'    #redirect to home page after login
 LOGIN_URL = 'login'
