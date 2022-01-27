@@ -1,0 +1,22 @@
+{% extends "rides/base.html" %}
+{% block content %}
+    {% for ride in rides %}
+        {% if ride.complete == False %}
+            <article class="media content-section">
+                <img class="rounded-circle article-img" src="{{ ride.owner.profile.image.url }}">
+                <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="#">{{ ride.onwer }}</a>
+                    <small class="text-muted">{{ post.date_posted|date:"P F d, Y" }}</small>
+                </div>
+                <h2><a class="article-title" href="{% url 'ride-detail' ride.id%}">{{ ride.destination }}</a></h2>
+                <p class="article-content">Arrival time: {{ ride.arrival_time }}</p>
+                <p class="article-content">Now {{ ride.num_passengers }} people</p>
+                {% if ride.can_be_shared == True %}
+                    <p class="article-content">Now open for sharing!</p>
+                {% endif %}
+                </div>
+            </article>
+        {% endif %}
+    {% endfor %}
+{% endblock content %}
