@@ -1,6 +1,12 @@
 from django import forms
 from .models import Ride
 
+class SharerSearchForm(forms.Form):
+    destination = forms.CharField(max_length=100)
+    early_time = forms.DateTimeField()
+    late_time = forms.DateTimeField()
+    num_passengers = forms.IntegerField()
+
 # class RideCreationForm(forms.ModelForm):
 #     class Meta:
 #         model = Ride

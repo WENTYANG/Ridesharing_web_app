@@ -33,7 +33,7 @@ class Profile(models.Model):
             img.save(self.image.path)
 
 class DriverInfo(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE) #CASCADE: If the user is deleted, then the profile is deleted as well
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='driverinfo') #CASCADE: If the user is deleted, then the profile is deleted as well
     licence = models.CharField(max_length=10, default='')
     max_passengers = models.PositiveIntegerField(default = 0)
     vehicle_type = models.CharField(max_length=10, choices=VEHICLE_TYPE_CHOICES, default="SEDAN")

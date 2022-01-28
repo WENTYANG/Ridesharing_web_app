@@ -12,9 +12,12 @@ urlpatterns = [
     path('', RideListView.as_view(), name='rides-home'), #default look for <app>/<model>_<viewtype>.html (ride/ride_list.html)
     path('rides/<int:pk>/', RideDetailView.as_view(), name='ride-detail'),    #<int:pk> set variables in the path, the variable pk will be passed to the view
     path('rides/<int:pk>/update/', RideUpdateView.as_view(), name='rides-update'),
+    path('rides/<int:pk>/claim-service/', views.claim_service, name='claim-service'),
     path('rides/<int:pk>/delete/', RideDeleteView.as_view(), name='rides-delete'),
     path('rides/new/', RideCreateView.as_view(), name='ride-create'),         
     path('myrides/', views.myrides, name='rides-myrides'),
     path('my_joined_ride/', views.my_joined_ride, name='my_joined_ride'),
     path('my_driven_ride/', views.my_driven_ride, name='my_driven_ride'),
+    path('search_ride_driver/', views.search_ride_driver, name='search_ride_driver'),
+    path('search_ride_sharer/', views.search_ride_sharer, name='search_ride_sharer'),
 ]
