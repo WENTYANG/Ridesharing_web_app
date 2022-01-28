@@ -1,0 +1,19 @@
+{% extends "rides/base.html" %}
+{% block content %}
+    <head>
+        <meta charset="utf-8">
+        <title>My joined rides</title>
+        <style type="text/css">
+        a:link{color:rgb(40, 27, 221);}
+        a:visited{color:rgb(64, 48, 204);}
+        a:hover{color:rgb(64, 174, 224);}
+        a:active{color:#ccc;}
+        </style>
+    </head>
+    <div>
+        <body><a style="font-family:cambria;font-size:20px;" href="{% url 'my_joined_ride' %}">My joined rides</a></body>
+    </div>
+    <div>
+        <body><a style="font-family:cambria;font-size:20px;" href="{% url 'my_driven_ride' %}">My driven rides</a></body>
+    </div>
+{% endblock content %}

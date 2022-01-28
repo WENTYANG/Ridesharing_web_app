@@ -14,5 +14,7 @@ urlpatterns = [
     path('rides/<int:pk>/update/', RideUpdateView.as_view(), name='rides-update'),
     path('rides/<int:pk>/delete/', RideDeleteView.as_view(), name='rides-delete'),
     path('rides/new/', RideCreateView.as_view(), name='ride-create'),         
-    path('about/', views.about, name='rides-about'),
+    path('myrides/', views.myrides, name='rides-myrides'),
+    path('my_joined_ride/', views.my_joined_ride, name='my_joined_ride'),
+    path('my_driven_ride/', views.my_driven_ride, name='my_driven_ride'),
 ]

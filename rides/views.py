@@ -11,6 +11,7 @@ from .models import Ride
 from django.contrib.auth.decorators import login_required
 # from .forms import RideUpdateForm
 from django.contrib import messages
+from django.db.models import Q
 
 #from django.http import HttpResponse
 # posts = [       #list of dictionaries, each dict is a post
@@ -65,8 +66,9 @@ class RideUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return super().form_valid(form)             #Run the form_valid in the parent class
 
     def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.owner:
+        ride = self.get_object()
+        if (self.request.user == ride.owner) and (ride.owner ==  ride.driver):         
+            #owner is the same as driver, meaning the ride is still open. Owner can edit the ride as long as it's not confirmed
             return True
         return False
 
@@ -80,5 +82,20 @@ class RideDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
-def about(request):
-    return render(request, 'rides/about.html', {'title': 'About'}) #title is displayed on the browser tab
+#The owned or shared ride of one user
+@login_required
+def my_joined_ride(request):
+    context = {         
+        'owner_rides': request.user.ride_onwer.all(),
+        'sharer_rides': request.user.ride_sharer.all()
+    }
+    return render(request, 'rides/my_joined_ride.html', context)
+
+def my_driven_ride(request):
+    context = {         
+        'driver_rides': request.user.ride_driver.filter(~Q(driver=request.user))
+    }
+    return render(request, 'rides/my_driven_ride.html', context)
+
+def myrides(request):
+    return render(request, 'rides/myrides.html', {'title': 'About'}) #title is displayed on the browser tab

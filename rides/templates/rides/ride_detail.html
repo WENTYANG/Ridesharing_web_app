@@ -18,8 +18,16 @@
             <p class="article-content">Now {{ object.num_passengers }} people in the ride</p>
             <p class="article-content">{{ object.vehicle_type }}</p>
             <p class="article-content">{{ object.special_request }}</p>
-            {% if object.can_be_shared == True %}
+            {% if object.can_be_shared == True and object.owner == object.driver %}
                 <p class="article-content">Now open for sharing!</p>
+            {% endif %}
+            {% for asharer in object.sharer.all %}
+                <p class="article-content">Sharer {{asharer.username}} joining the ride!</p>
+            {% endfor %}
+            {% if object.owner != object.driver %}
+                <p class="article-content">Driver : {{object.driver.username}}</p>
+                <p class="article-content">Vehicle : {{object.driver.vehicle_type}}</p>
+                <p class="article-content">Lisence : {{object.driver.Lisence}}</p>
             {% endif %}
         </div>
     </article>

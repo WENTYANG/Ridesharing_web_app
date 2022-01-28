@@ -47,13 +47,9 @@ def profile(request):
 @login_required
 def driverinfo(request):
     if request.method == 'POST': #When we submit our form and possibly update the data
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        d_form = DriverInfoForm(request.POST, 
-                                    request.FILES,      #images uploaded
-                                    instance=request.user.driverinfo)
+        d_form = DriverInfoForm(request.POST, instance=request.user.driverinfo)
         #Update the forms
-        if u_form.is_valid() and d_form.is_valid():     
-            u_form.save()
+        if d_form.is_valid():     
             d_form.save()
         #Get feedback to user and redirect them to driverinfo page
         messages.success(request, f'Your driver information has been updated!')
@@ -61,12 +57,10 @@ def driverinfo(request):
         #redirect instead of fall down to render function, because of the Post-get redirect pattern, if reload after submitted a form, there will be a message
         #warning there will be a resubmission --> run another post request, but redirect will send a get request instead of post
     else:
-        u_form = UserUpdateForm(instance=request.user)
         d_form = DriverInfoForm(instance=request.user.driverinfo)
 
     #pass in for template
     context = {
-        'u_form': u_form,
         'd_form': d_form
     }
 

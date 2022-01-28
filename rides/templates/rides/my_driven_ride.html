@@ -1,6 +1,6 @@
 {% extends "rides/base.html" %}
 {% block content %}
-    {% for ride in rides %}
+    {% for ride in driver_rides %}
         {% if ride.complete == False %}
             <article class="media content-section">
                 <img class="rounded-circle article-img" src="{{ ride.owner.profile.image.url }}">

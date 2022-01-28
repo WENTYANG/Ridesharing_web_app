@@ -36,8 +36,8 @@ class Ride(models.Model):
     arrival_time = models.DateTimeField(help_text='Format: 2020-01-01 12:00')
     num_passengers = models.PositiveIntegerField(default=1)
 
-    driver = models.ForeignKey(User, related_name='ride_driver', on_delete=models.DO_NOTHING, null=True, blank=True, default=None, space=True)
-    sharer = models.ManyToManyField(User, blank=True)
+    driver = models.ForeignKey(User, related_name='ride_driver', on_delete=models.DO_NOTHING, null=True, blank=True, default=None)
+    sharer = models.ManyToManyField(User, related_name='ride_sharer', blank=True)
 
     vehicle_type = models.CharField(max_length=10, choices=VEHICLE_TYPE_CHOICES, blank=True) #Owner may specify a vehicle type when requesting a ride
     can_be_shared = models.BooleanField()
