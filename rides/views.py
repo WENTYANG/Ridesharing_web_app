@@ -81,7 +81,8 @@ class RideUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         ride = self.get_object()
-        if (self.request.user == ride.owner) and (ride.owner == ride.driver):
+        if (self.request.user == ride.owner) and (ride.owner == ride.driver)\
+            and (ride.complete==False):
             # owner is the same as driver, meaning the ride is still open. Owner can edit the ride as long as it's not confirmed
             return True
         return False
@@ -92,8 +93,8 @@ class RideDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = '/'  # Need the '/' to resolve to the home address
 
     def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.owner:
+        ride = self.get_object()
+        if self.request.user == ride.owner and ride.complete==False:
             return True
         return False
 
@@ -103,8 +104,8 @@ class RideDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 @login_required
 def my_joined_ride(request):
     context = {
-        'owner_rides': request.user.ride_onwer.all(),
-        'sharer_rides': request.user.ride_sharer.all()
+        'owner_rides': request.user.ride_onwer.filter(complete=False),
+        'sharer_rides': request.user.ride_sharer.filter(complete=False)
     }
     return render(request, 'rides/my_joined_ride.html', context)
 
@@ -126,8 +127,8 @@ def search_ride_driver(request):
         context = {
             'open_rides': Ride.objects.filter(
                 ~Q(owner=request.user),
-                is_open=True, 
-                vehicle_type=request.user.driverinfo.vehicle_type,
+                Q(vehicle_type=request.user.driverinfo.vehicle_type)|Q(vehicle_type=''),
+                is_open=True,
                 num_all__lt=request.user.driverinfo.max_passengers,
                 )
         }
@@ -175,8 +176,9 @@ def claim_service(request, pk):
         #Check if the order status matches the driver's information
         order = Ride.objects.get(pk=pk)
         if(order.is_open==True)\
-            and (order.vehicle_type==driver.driverinfo.vehicle_type)\
+            and (order.vehicle_type==driver.driverinfo.vehicle_type or order.vehicle_type=='')\
             and (order.num_all<=driver.driverinfo.max_passengers):
+            # or order.vehicle_type==None
             order.driver=driver
             order.is_open=False
             print(order.driver.driverinfo.vehicle_type)
@@ -192,3 +194,17 @@ def claim_service(request, pk):
     else:
         # If not currently a driver, go to driver register page
         return render(request, 'rides/not_driver.html')
+
+@login_required
+def order_complete(request, pk):
+    driver = request.user
+    order = Ride.objects.get(pk=pk)
+    if(driver.driverinfo.licence != '' and order.driver==driver and order.owner!=driver):
+        if(order.complete==True):
+            messages.warning(request, f'The order is already completed!')
+        else:
+            order.complete=True
+            order.save()
+            messages.success(request, f'The order has been completed!')
+    return redirect('ride-detail', pk=pk)
+        #return render(request, 'rides/order_complete.html')

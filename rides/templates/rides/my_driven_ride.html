@@ -7,11 +7,11 @@
                 <div class="media-body">
                 <div class="article-metadata">
                     <a class="mr-2" href="#">{{ ride.owner.username }}</a>
-                    <h2><a class="article-title" href="{% url 'ride-detail' ride.id%}">{{ ride.destination }}</a></h2>
+                    <h2><a class="article-title" href="{% url 'ride-detail' ride.id%}">Destination: {{ ride.destination }}</a></h2>
                     <small class="text-muted">{{ ride.date_posted|date:"P F d, Y" }}</small>
                 </div>
                 <p class="article-content">Arrival time: {{ ride.arrival_time }}</p>
-                <p class="article-content">Now {{ ride.num_all }} people</p>
+                <p class="article-content">Now {{ ride.num_passengers }} people</p>
                 {% if ride.can_be_shared == True %}
                     <p class="article-content">This is a shared ride.</p>
                 {% endif %}

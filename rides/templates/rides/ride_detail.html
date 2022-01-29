@@ -13,7 +13,7 @@
                 </div> 
             {% endif %}
         </div>
-            <h2 class="article-title">{{ object.destination }}</h2>
+            <h2 class="article-title">Destination: {{ object.destination }}</h2>
             <p class="article-content">Arrival time: {{ object.arrival_time }}</p>
             <p class="article-content">Now {{ object.num_passengers }} people in the ride</p>
             <p class="article-content">Request vehicle: {{ object.vehicle_type }}</p>
@@ -32,6 +32,11 @@
             {% if user.driverinfo.licence != '' and object.owner != user %}
                 <div>
                     <a class = "btn btn-primary btn-sm mt-1 mb-1"href="{% url 'claim-service' object.id %}">Accept Order</a>
+                </div> 
+            {% endif %}
+            {% if object.driver == user and object.owner != user %}
+                <div>
+                    <a class = "btn btn-primary btn-sm mt-1 mb-1"href="{% url 'order-complete' object.id %}">Complete Order</a>
                 </div> 
             {% endif %}
         </div>
