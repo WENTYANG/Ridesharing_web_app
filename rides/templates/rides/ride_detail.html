@@ -15,15 +15,17 @@
         </div>
             <h2 class="article-title">Destination: {{ object.destination }}</h2>
             <p class="article-content">Arrival time: {{ object.arrival_time }}</p>
-            <p class="article-content">Now {{ object.num_passengers }} people in the ride</p>
+            <p class="article-content">Now {{ object.num_all }} people in the ride</p>
             <p class="article-content">Request vehicle: {{ object.vehicle_type }}</p>
             <p class="article-content">{{ object.special_request }}</p>
             {% if object.can_be_shared == True and object.owner == object.driver %}
                 <p class="article-content">Now open for sharing!</p>
             {% endif %}
-            {% for asharer in object.sharer.all %}
-                <p class="article-content">Sharer {{asharer.username}} joining the ride!</p>
-            {% endfor %}
+            {% if object.sharer.all.count != 0 %}
+                {% for asharer in object.sharer.all %}
+                    <p class="article-content">Sharer {{asharer.username}} joining the ride!</p>
+                {% endfor %}
+            {% endif %}
             {% if object.owner != object.driver %}
                 <p class="article-content">Driver : {{ object.driver.username }}</p>
                 <p class="article-content">Vehicle : {{ object.driver.driverinfo.vehicle_type }}</p>
@@ -38,6 +40,11 @@
                 <div>
                     <a class = "btn btn-primary btn-sm mt-1 mb-1"href="{% url 'order-complete' object.id %}">Complete Order</a>
                 </div> 
+            {% endif %}
+            {% if object.is_open == True and object.complete == False and object.can_be_shared == True %}
+                <div>
+                    <a class = "btn btn-danger btn-sm mt-1 mb-1"href="{% url 'share-ride' object.id %}">Share the ride</a>
+                </div>
             {% endif %}
         </div>
     </article>

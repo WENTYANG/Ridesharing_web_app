@@ -77,12 +77,34 @@ WSGI_APPLICATION = 'ridesharing.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'ridesharing',
+#         'USER': 'ridesharinguser',
+#         'PASSWORD': 'ridesharingdemima',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'rideapp',
+#         'USER': 'ywt',
+#         'PASSWORD': 'ywt1031',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ridesharing',
-        'USER': 'ridesharinguser',
-        'PASSWORD': 'ridesharingdemima',
+        'NAME': 'new_rideapp',
+        'USER': 'ywt',
+        'PASSWORD': 'ywt1031',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -92,17 +114,6 @@ DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#     'NAME': 'rideapp',
-#     'USER': 'wenty',
-#     'PASSWORD': 'wenty12358',
-#     'HOST': 'localhost',
-#     'PORT': '',
 #     }
 # }
 

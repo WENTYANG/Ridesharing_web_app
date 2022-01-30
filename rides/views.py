@@ -7,7 +7,7 @@ from django.views.generic import(
     UpdateView,
     DeleteView,
 )
-from .models import Ride
+from .models import Ride, Membership
 from django.contrib.auth.decorators import login_required
 # from .forms import RideUpdateForm
 from django.contrib import messages
@@ -66,8 +66,8 @@ class RideCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user
         form.instance.driver = self.request.user
         form.instance.num_all = form.instance.num_passengers
-        return super().form_valid(form)  # Run the form_valid in the parent class
 
+        return super().form_valid(form)  # Run the form_valid in the parent class
 
 class RideUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Ride
@@ -77,6 +77,10 @@ class RideUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def form_valid(self, form):
         # Set the author before submitting the form
         form.instance.owner = self.request.user
+        form.instance.num_all = form.instance.num_passengers + form.instance.num_sharers
+        # for sharer in form.instance.sharer.all():
+        #     print(sharer.username)
+        # print(form.instance.num_all)
         return super().form_valid(form)  # Run the form_valid in the parent class
 
     def test_func(self):
@@ -104,7 +108,7 @@ class RideDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 @login_required
 def my_joined_ride(request):
     context = {
-        'owner_rides': request.user.ride_onwer.filter(complete=False),
+        'owner_rides': request.user.ride_owner.filter(complete=False),
         'sharer_rides': request.user.ride_sharer.filter(complete=False)
     }
     return render(request, 'rides/my_joined_ride.html', context)
@@ -208,3 +212,56 @@ def order_complete(request, pk):
             messages.success(request, f'The order has been completed!')
     return redirect('ride-detail', pk=pk)
         #return render(request, 'rides/order_complete.html')
+
+@login_required
+def share_ride(request, pk):
+    sharer = request.user
+    ride = Ride.objects.get(pk=pk)
+    if request.method == 'POST': 
+        # SharerSearchForm is not a model form, so we don't have to pass an instance
+        s_form = SharerSearchForm(request.POST)
+        # Update the forms
+        if s_form.is_valid():
+            if(ride.is_open==True and ride.complete==False and ride.can_be_shared==True):
+                if(ride.arrival_time > s_form.cleaned_data['late_time'] or ride.arrival_time < s_form.cleaned_data['early_time']):
+                    messages.warning(request, f'Your required time does not match with the order!')
+                else:  
+                    # ride.sharer.add(sharer, 
+                    #             through_defaults={
+                    #                 'early_time':s_form.cleaned_data['early_time'],
+                    #                 'late_time':s_form.cleaned_data['late_time'], 
+                    #                 'num_people':s_form.cleaned_data['num_passengers']
+                    #                 }
+                    #             )
+                    num_passengers = s_form.cleaned_data['num_passengers']
+                    early_time = s_form.cleaned_data['early_time']
+                    late_time = s_form.cleaned_data['late_time']
+                    new_membership = Membership(user=request.user, ride=ride, early_time=early_time, late_time=late_time, num_people=num_passengers)
+                    
+                    print(new_membership.user.username)
+                    print(new_membership.ride)
+                    print(new_membership.early_time)
+
+                    ride.num_sharers = ride.num_sharers + num_passengers
+                    ride.num_all = ride.num_all + num_passengers
+                    ride.save()
+                    new_membership.save()
+                    context = {'pk': pk}
+                    messages.success(request, f'You have joined the order!')
+                return render(request, 'rides/share_ride.html', context)
+            else:
+                messages.warning(request, f'The order is not currently open for sharing!')
+    else:
+        nowtime = timezone.now()
+        s_form = SharerSearchForm(
+            initial={
+                'destination': '',
+                'early_time': nowtime,
+                'late_time': nowtime,
+                'num_passengers': 1,
+            }
+        )
+    # pass in for template
+    return render(request, 'rides/share_ride.html', {'form': s_form})
+
+    

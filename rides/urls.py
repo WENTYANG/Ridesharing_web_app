@@ -13,6 +13,7 @@ urlpatterns = [
     path('rides/<int:pk>/', RideDetailView.as_view(), name='ride-detail'),    #<int:pk> set variables in the path, the variable pk will be passed to the view
     path('rides/<int:pk>/update/', RideUpdateView.as_view(), name='rides-update'),
     path('rides/<int:pk>/claim-service/', views.claim_service, name='claim-service'),
+    path('rides/<int:pk>/share-ride', views.share_ride, name='share-ride'),
     path('rides/<int:pk>/order-complete/', views.order_complete, name='order-complete'),
     path('rides/<int:pk>/delete/', RideDeleteView.as_view(), name='rides-delete'),
     path('rides/new/', RideCreateView.as_view(), name='ride-create'),         
