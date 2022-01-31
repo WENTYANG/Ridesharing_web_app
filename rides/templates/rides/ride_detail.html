@@ -18,7 +18,7 @@
             <p class="article-content">Now {{ object.num_all }} people in the ride</p>
             <p class="article-content">Request vehicle: {{ object.vehicle_type }}</p>
             <p class="article-content">{{ object.special_request }}</p>
-            {% if object.can_be_shared == True and object.owner == object.driver %}
+            {% if object.can_be_shared == True and object.is_open == True %}
                 <p class="article-content">Now open for sharing!</p>
             {% endif %}
             {% if object.sharer.all.count != 0 %}
@@ -41,11 +41,15 @@
                     <a class = "btn btn-primary btn-sm mt-1 mb-1"href="{% url 'order-complete' object.id %}">Complete Order</a>
                 </div> 
             {% endif %}
-            {% if object.is_open == True and object.complete == False and object.can_be_shared == True %}
+            {% if object.is_open == True and object.complete == False and object.can_be_shared == True and object.owner != user %}
                 <div>
                     <a class = "btn btn-danger btn-sm mt-1 mb-1"href="{% url 'share-ride' object.id %}">Share the ride</a>
                 </div>
+                <div>
+                    <a class = "btn btn-danger btn-sm mt-1 mb-1"href="{% url 'quit-sharing' object.id %}">Quit sharing</a>
+                </div>
             {% endif %}
+            
         </div>
     </article>
 {% endblock content %}

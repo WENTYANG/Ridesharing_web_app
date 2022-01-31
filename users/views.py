@@ -65,3 +65,5 @@ def driverinfo(request):
     }
 
     return render(request, 'users/driverinfo.html', context)
+
+

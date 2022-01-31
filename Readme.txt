@@ -27,10 +27,10 @@ Status now:
 大问题：
     4.driver接单完把车辆信息改了怎么办
     5.踢出sharer
-    12.delete order: check ride is open, not confirmed by a driver
-    14.重复share怎么办
-    15.可以share自己的ride
-    16.加一个sharer修改人数，退出（until司机接单）
+    12.delete order: check ride is open, not confirmed by a driver --> ride.is_open==True
+    14.重复share怎么办  --> in views: if Membership.objects.filter(ride=ride, user=sharer).exists()
+    15.可以share自己的ride  --> in template: if object.owner != user
+    16.加一个sharer修改人数，退出（until司机接单） --> quit_sharing
 
 
 小问题：

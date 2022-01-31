@@ -16,6 +16,7 @@ urlpatterns = [
     path('rides/<int:pk>/share-ride', views.share_ride, name='share-ride'),
     path('rides/<int:pk>/order-complete/', views.order_complete, name='order-complete'),
     path('rides/<int:pk>/delete/', RideDeleteView.as_view(), name='rides-delete'),
+    path('rides/<int:pk>/quit-sharing/', views.quit_sharing, name='quit-sharing'),
     path('rides/new/', RideCreateView.as_view(), name='ride-create'),         
     path('myrides/', views.myrides, name='rides-myrides'),
     path('my_joined_ride/', views.my_joined_ride, name='my_joined_ride'),
